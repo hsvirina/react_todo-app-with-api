@@ -27,38 +27,25 @@ export const Footer: React.FC<Props> = ({
 
       {/* Active link should have the 'selected' class */}
       <nav className="filter" data-cy="Filter">
-        <a
-          href="#/"
-          className={classNames('filter__link', {
-            selected: todoStatus === TodoStatus.all,
-          })}
-          data-cy="FilterLinkAll"
-          onClick={() => setTodoStatus(TodoStatus.all)}
-        >
-          All
-        </a>
+        {Object.values(TodoStatus).map(status => {
+          const handleTodoStatus = () => {
+            setTodoStatus(status);
+          };
 
-        <a
-          href="#/active"
-          className={classNames('filter__link', {
-            selected: todoStatus === TodoStatus.active,
-          })}
-          data-cy="FilterLinkActive"
-          onClick={() => setTodoStatus(TodoStatus.active)}
-        >
-          Active
-        </a>
-
-        <a
-          href="#/completed"
-          className={classNames('filter__link', {
-            selected: todoStatus === TodoStatus.completed,
-          })}
-          data-cy="FilterLinkCompleted"
-          onClick={() => setTodoStatus(TodoStatus.completed)}
-        >
-          Completed
-        </a>
+          return (
+            <a
+              href={`#/${status}`}
+              className={classNames('filter__link', {
+                selected: todoStatus === status,
+              })}
+              data-cy={`FilterLink${status}`}
+              onClick={handleTodoStatus}
+              key={status}
+            >
+              {status}
+            </a>
+          );
+        })}
       </nav>
 
       {/* this button should be disabled if there are no completed todos */}

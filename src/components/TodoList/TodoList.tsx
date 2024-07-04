@@ -25,17 +25,21 @@ export const TodoList: React.FC<Props> = ({
   return (
     <section className="todoapp__main" data-cy="TodoList">
       <TransitionGroup>
-        {todos.map(todo => (
-          <CSSTransition key={todo.id} timeout={300} classNames="item">
-            <TodoItem
-              todo={todo}
-              onDelete={onDelete}
-              isLoading={isLoadingTodo.includes(todo.id)}
-              onUpdateTodo={onUpdateTodo}
-              updateToggle={updateToggle}
-            />
-          </CSSTransition>
-        ))}
+        {todos.map(todo => {
+          const isIncludesId = isLoadingTodo.includes(todo.id);
+
+          return (
+            <CSSTransition key={todo.id} timeout={300} classNames="item">
+              <TodoItem
+                todo={todo}
+                onDelete={onDelete}
+                isLoading={isIncludesId}
+                onUpdateTodo={onUpdateTodo}
+                updateToggle={updateToggle}
+              />
+            </CSSTransition>
+          );
+        })}
 
         {tempTodo && (
           <CSSTransition key={tempTodo.id} timeout={300} classNames="item">

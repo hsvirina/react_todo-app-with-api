@@ -33,8 +33,6 @@ export const TodoItem: React.FC<Props> = ({
   const { id, title, completed } = todo;
 
   const handleSubmit = () => {
-    // event.preventDefault();
-
     const correctTitle = updatedTitleTodo.trim();
 
     if (correctTitle === title) {
@@ -76,6 +74,10 @@ export const TodoItem: React.FC<Props> = ({
     }
   };
 
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setUpdatedTitleTodo(event.target.value);
+  };
+
   return (
     <div
       key={id}
@@ -103,10 +105,10 @@ export const TodoItem: React.FC<Props> = ({
             className="todo__title-field"
             placeholder="Empty todo will be deleted"
             value={updatedTitleTodo}
-            onChange={event => setUpdatedTitleTodo(event.target.value)}
             ref={updatedInput}
             onBlur={handleBlur}
             onKeyDown={handleKeyEvent}
+            onChange={handleChange}
           />
         </form>
       ) : (
