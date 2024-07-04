@@ -7,6 +7,7 @@ type Props = {
   onDelete: (id: number) => void;
   isLoading: boolean;
   onUpdateTodo: (updatedTodo: Todo) => void;
+  updateToggle: (toggleTodo: Todo) => void;
 };
 
 export const TodoItem: React.FC<Props> = ({
@@ -14,6 +15,7 @@ export const TodoItem: React.FC<Props> = ({
   onDelete,
   isLoading,
   onUpdateTodo,
+  updateToggle,
 }) => {
   const [isEditingTodo, setIsEditingTodo] = useState(false);
   const [updatedTitleTodo, setUpdatedTitleTodo] = useState(todo.title);
@@ -30,8 +32,8 @@ export const TodoItem: React.FC<Props> = ({
 
   const { id, title, completed } = todo;
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
+  const handleSubmit = () => {
+    // event.preventDefault();
 
     const correctTitle = updatedTitleTodo.trim();
 
@@ -52,6 +54,28 @@ export const TodoItem: React.FC<Props> = ({
     onUpdateTodo({ ...todo, title: correctTitle });
   };
 
+  const handleBlur = () => {
+    handleSubmit();
+  };
+
+  const handleKeyEvent = (keyEvent: React.KeyboardEvent<HTMLInputElement>) => {
+    switch (keyEvent.key) {
+      case 'Enter':
+        keyEvent.preventDefault();
+        handleSubmit();
+        break;
+      case 'Escape':
+        setUpdatedTitleTodo(todo.title);
+        setIsEditingTodo(false);
+    }
+  };
+
+  const handleDoubleClick = () => {
+    if (!isEditingTodo) {
+      setIsEditingTodo(true);
+    }
+  };
+
   return (
     <div
       key={id}
@@ -66,26 +90,12 @@ export const TodoItem: React.FC<Props> = ({
           type="checkbox"
           className="todo__status"
           checked={completed}
-          onClick={() => {
-            onUpdateTodo({
-              ...todo,
-              completed: !todo.completed,
-            });
-          }}
+          onChange={() => updateToggle(todo)}
         />
       </label>
 
       {isEditingTodo ? (
-        <form
-          onSubmit={handleSubmit}
-          onBlur={handleSubmit}
-          onKeyUp={event => {
-            if (event.key === 'Escape') {
-              setUpdatedTitleTodo(todo.title);
-              setIsEditingTodo(false);
-            }
-          }}
-        >
+        <form>
           <input
             autoFocus
             data-cy="TodoTitleField"
@@ -95,6 +105,8 @@ export const TodoItem: React.FC<Props> = ({
             value={updatedTitleTodo}
             onChange={event => setUpdatedTitleTodo(event.target.value)}
             ref={updatedInput}
+            onBlur={handleBlur}
+            onKeyDown={handleKeyEvent}
           />
         </form>
       ) : (
@@ -102,11 +114,7 @@ export const TodoItem: React.FC<Props> = ({
           <span
             data-cy="TodoTitle"
             className="todo__title"
-            onDoubleClick={() => {
-              if (!isEditingTodo) {
-                setIsEditingTodo(true);
-              }
-            }}
+            onDoubleClick={handleDoubleClick}
           >
             {updatedTitleTodo}
           </span>

@@ -52,15 +52,15 @@ export const App: React.FC = () => {
     return <UserWarning />;
   }
 
-  function getActiveTodosArray() {
+  const getActiveTodosArray = () => {
     return todos.filter(todo => !todo.completed);
-  }
+  };
 
-  function getCompletedTodosArray() {
+  const getCompletedTodosArray = () => {
     return todos.filter(todo => todo.completed);
-  }
+  };
 
-  function addTodo() {
+  const addTodo = () => {
     const correctTitle = newTodoTitle.trim();
 
     const newTempTodo = {
@@ -89,9 +89,9 @@ export const App: React.FC = () => {
         setTempTodo(null);
         setIsLoadingTodo(ids => ids.filter(todoId => todoId !== 0));
       });
-  }
+  };
 
-  function deleteTodoId(todoId: number) {
+  const deleteTodoId = (todoId: number) => {
     setIsLoadingTodo(ids => [...ids, todoId]);
 
     deleteTodo(todoId)
@@ -107,9 +107,9 @@ export const App: React.FC = () => {
       .finally(() => {
         setIsLoadingTodo([]);
       });
-  }
+  };
 
-  function updateTodoTitle(todo: Todo) {
+  const updateTodoTitle = (todo: Todo) => {
     setIsLoadingTodo(ids => [...ids, todo.id]);
 
     updateTodo(todo)
@@ -127,9 +127,9 @@ export const App: React.FC = () => {
       .finally(() => {
         setIsLoadingTodo([]);
       });
-  }
+  };
 
-  function updateToggle(toggleTodo: Todo) {
+  const updateToggle = (toggleTodo: Todo) => {
     setIsLoadingTodo(ids => [...ids, toggleTodo.id]);
 
     const updatedTodo = { ...toggleTodo, completed: !toggleTodo.completed };
@@ -143,13 +143,13 @@ export const App: React.FC = () => {
         );
       })
       .catch(() => {
-        setErrorMessage('Unable to add a todo');
+        setErrorMessage('Unable to update a todo');
         setTimeout(() => setErrorMessage(''), 3000);
       })
       .finally(() => {
         setIsLoadingTodo([]);
       });
-  }
+  };
 
   const handleToggleAll = () => {
     let activeTodos = getActiveTodosArray();
@@ -187,10 +187,11 @@ export const App: React.FC = () => {
           tempTodo={tempTodo}
           isLoadingTodo={isLoadingTodo}
           onUpdateTodo={updateTodoTitle}
+          updateToggle={updateToggle}
         />
 
         {/* Hide the footer if there are no todos */}
-        {todos.length > 0 && (
+        {!!todos.length && (
           <Footer
             todos={todos}
             todoStatus={todoStatus}

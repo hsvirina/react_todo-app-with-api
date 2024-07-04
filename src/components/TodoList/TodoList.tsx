@@ -11,6 +11,7 @@ type Props = {
   tempTodo: Todo | null;
   isLoadingTodo: number[];
   onUpdateTodo: (updatedTodo: Todo) => void;
+  updateToggle: (toggleTodo: Todo) => void;
 };
 
 export const TodoList: React.FC<Props> = ({
@@ -19,6 +20,7 @@ export const TodoList: React.FC<Props> = ({
   tempTodo,
   isLoadingTodo,
   onUpdateTodo,
+  updateToggle,
 }) => {
   return (
     <section className="todoapp__main" data-cy="TodoList">
@@ -30,6 +32,7 @@ export const TodoList: React.FC<Props> = ({
               onDelete={onDelete}
               isLoading={isLoadingTodo.includes(todo.id)}
               onUpdateTodo={onUpdateTodo}
+              updateToggle={updateToggle}
             />
           </CSSTransition>
         ))}
